@@ -26,7 +26,7 @@ export const ZenButton: React.FC<ZenButtonProps> = ({ config, onClick }) => {
 
   // Background & Shadow logic
   let bgClasses = "bg-[#f0f2f5]";
-  let shadowClasses = "zen-shadow hover:translate-y-[-1px]";
+  let shadowClasses = "zen-shadow"; // Removed hover:translate-y-[-1px]
   
   if (config.color === 'black') {
     bgClasses = "bg-[#111]";
