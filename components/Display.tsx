@@ -18,19 +18,20 @@ export const Display: React.FC<DisplayProps> = ({ value, previousValue, operatio
 
       {/* Main LCD Area */}
       <div className="flex-1 flex flex-col justify-end items-end p-4 min-h-[110px] text-right relative z-10">
-        <div className="text-gray-500 text-xs font-mono h-4 mb-1">
+        {/* Small history text */}
+        <div className="text-gray-500 text-xs font-mono h-4 mb-1 pr-1">
           {previousValue} {operation}
         </div>
         
         {/* LCD Container */}
-        <div className="relative w-full h-[60px] flex items-center justify-end overflow-hidden">
-           {/* Ghost Digits (Background 8s) */}
-           <div className="absolute top-0 right-0 text-6xl text-[#b0b5b9] font-digital tracking-widest opacity-30 select-none pointer-events-none transform translate-y-[2px]">
+        <div className="relative w-full h-[70px] flex items-center justify-end overflow-hidden">
+           {/* Ghost Digits (Background 8s) - Perfectly positioned to match Digital-7 Mono */}
+           <div className="absolute top-0 right-0 text-[5rem] leading-none text-[#1a1a1a] font-digital opacity-[0.08] select-none pointer-events-none transform translate-y-[2px]">
              8888888888
            </div>
            
            {/* Active Digits */}
-           <div className="relative text-6xl text-[#1a1a1a] font-digital tracking-widest overflow-hidden whitespace-nowrap">
+           <div className="relative text-[5rem] leading-none text-[#1a1a1a] font-digital overflow-hidden whitespace-nowrap transform translate-y-[2px]">
              {value}
            </div>
         </div>
