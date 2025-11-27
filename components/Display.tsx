@@ -17,21 +17,24 @@ export const Display: React.FC<DisplayProps> = ({ value, previousValue, operatio
       </div>
 
       {/* Main LCD Area */}
-      <div className="flex-1 flex flex-col justify-end items-end p-4 min-h-[110px] text-right relative z-10">
+      <div className="flex-1 flex flex-col justify-end items-end p-4 pb-2 min-h-[110px] text-right relative z-10">
         {/* Small history text */}
         <div className="text-gray-500 text-xs font-mono h-4 mb-1 pr-1">
           {previousValue} {operation}
         </div>
         
-        {/* LCD Container */}
-        <div className="relative w-full h-[70px] flex items-center justify-end overflow-hidden">
-           {/* Ghost Digits (Background 8s) - Perfectly positioned to match Digital-7 Mono */}
-           <div className="absolute top-0 right-0 text-[5rem] leading-none text-[#1a1a1a] font-digital opacity-[0.08] select-none pointer-events-none transform translate-y-[2px]">
-             8888888888
+        {/* LCD Container - Using Grid to perfectly overlay the ghost and active digits */}
+        {/* This ensures that '8' and '1' align perfectly to the right edge */}
+        <div className="relative w-full h-[65px] grid grid-cols-1 grid-rows-1 items-end justify-end overflow-hidden">
+           
+           {/* Ghost Digits (Background 8s) */}
+           {/* 12 digits to cover the max input length */}
+           <div className="col-start-1 row-start-1 text-[4rem] leading-none text-[#1a1a1a] font-digital opacity-[0.06] select-none pointer-events-none text-right w-full">
+             888888888888
            </div>
            
            {/* Active Digits */}
-           <div className="relative text-[5rem] leading-none text-[#1a1a1a] font-digital overflow-hidden whitespace-nowrap transform translate-y-[2px]">
+           <div className="col-start-1 row-start-1 text-[4rem] leading-none text-[#1a1a1a] font-digital overflow-hidden whitespace-nowrap text-right w-full z-10">
              {value}
            </div>
         </div>

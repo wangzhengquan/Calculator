@@ -36,6 +36,22 @@ export default function App() {
 
   const handleNumber = (number: string) => {
     if (number === '.' && state.currentOperand.includes('.')) return;
+    
+    // Limit input length to 10 characters to prevent overflowing the LCD display
+    // This matches the visual limit of the ghost digits
+    const pureNumbers = state.currentOperand.replace('.', '');
+    if (pureNumbers.length >= 10 && !state.operation && !state.previousOperand && state.currentOperand !== '0') {
+      return;
+    }
+    // Check if we are starting a new number after an operation
+    // If state.previousOperand is set and we just started typing (implicit reset logic usually handled by operation state)
+    // Here we just append. Logic for "start new number" is implicit in how calculators work:
+    // usually if you type a number after an op, it clears current. 
+    // BUT this simple calculator implementation appends to 'currentOperand' which is cleared/reset in handleOperation.
+    
+    // Simple length check on the string being built
+    if (state.currentOperand.length >= 11) return; // Hard cap on string length including dot
+
     if (state.currentOperand === '0' && number !== '.') {
       setState(prev => ({ ...prev, currentOperand: number }));
     } else {
@@ -75,8 +91,13 @@ export default function App() {
       case '%': computation = p % c; break;
     }
     
-    // Formatting to avoid long decimals
-    return computation.toString().slice(0, 10);
+    // Formatting to fit display
+    // If result is too large, use exponential? For now, slice.
+    let resString = computation.toString();
+    if (resString.length > 11) {
+        resString = resString.slice(0, 11);
+    }
+    return resString;
   };
 
   const handleCompute = () => {
