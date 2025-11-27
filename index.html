@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zen Ink Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* Custom Neumorphic Utilities */
+      .neu-flat {
+        background: #e0e5ec;
+        box-shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
+      }
+      .neu-pressed {
+        background: #e0e5ec;
+        box-shadow: inset 6px 6px 10px 0 rgba(163,177,198, 0.7), inset -6px -6px 10px 0 rgba(255,255,255, 0.8);
+      }
+      .neu-concave {
+        background: linear-gradient(145deg, #caccd1, #f0f0f3);
+        box-shadow:  5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+      }
+      
+      /* Specific to the Keybox design - softer, whiter */
+      .zen-bg {
+        background-color: #f0f2f5;
+      }
+      .zen-shadow {
+        box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+      }
+      .zen-shadow-sm {
+        box-shadow: 5px 5px 10px #d1d9e6, -5px -5px 10px #ffffff;
+      }
+      .zen-shadow-inset {
+        box-shadow: inset 5px 5px 10px #d1d9e6, inset -5px -5px 10px #ffffff;
+      }
+      
+      body {
+        background-color: #e4e8ef;
+        font-family: 'Rajdhani', sans-serif;
+      }
+      
+      .font-mono-display {
+        font-family: 'JetBrains Mono', monospace;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
