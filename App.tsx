@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Settings, Trash2, Save } from 'lucide-react';
+import { Menu, Settings, Trash2, Save, Volume2, VolumeX } from 'lucide-react';
 import { ZenButton } from './components/ZenButton';
 import { Display } from './components/Display';
 import { BUTTONS } from './constants';
@@ -11,6 +11,7 @@ export default function App() {
     previousOperand: null,
     operation: null,
   });
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   const handleButtonClick = (value: string) => {
     // Find button config to know type
@@ -36,7 +37,7 @@ export default function App() {
 
   const handleNumber = (number: string) => {
     if (number === '.' && state.currentOperand.includes('.')) return;
-    
+
     // Limit input length to 10 characters to prevent overflowing the LCD display
     // This matches the visual limit of the ghost digits
     const pureNumbers = state.currentOperand.replace('.', '');
@@ -48,7 +49,7 @@ export default function App() {
     // Here we just append. Logic for "start new number" is implicit in how calculators work:
     // usually if you type a number after an op, it clears current. 
     // BUT this simple calculator implementation appends to 'currentOperand' which is cleared/reset in handleOperation.
-    
+
     // Simple length check on the string being built
     if (state.currentOperand.length >= 11) return; // Hard cap on string length including dot
 
@@ -81,7 +82,7 @@ export default function App() {
     const p = parseFloat(prev);
     const c = parseFloat(current);
     if (isNaN(p) || isNaN(c)) return '';
-    
+
     let computation = 0;
     switch (op) {
       case '+': computation = p + c; break;
@@ -90,12 +91,12 @@ export default function App() {
       case '/': computation = p / c; break;
       case '%': computation = p % c; break;
     }
-    
+
     // Formatting to fit display
     // If result is too large, use exponential? For now, slice.
     let resString = computation.toString();
     if (resString.length > 11) {
-        resString = resString.slice(0, 11);
+      resString = resString.slice(0, 11);
     }
     return resString;
   };
@@ -127,25 +128,28 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[#e4e8ef]">
+    <div className="min-h-screen flex items-center justify-center sm:p-4">
       {/* Main Container - The "Phone/Device" Body */}
-      <div className="relative w-full max-w-[400px] bg-[#f0f2f5] rounded-[3rem] p-8 zen-shadow border border-white/40">
-        
+      <div className="relative w-full sm:max-w-[400px] bg-[#f0f2f5] sm:rounded-[3rem] px-8 py-4 zen-shadow border border-white/40">
+
         {/* Header Branding */}
         <div className="flex justify-between items-center mb-6 px-2">
           <div className="w-8 h-8 rounded-full zen-shadow-sm flex items-center justify-center text-gray-400">
-             <Settings size={14} />
+            <Settings size={14} />
           </div>
           <h1 className="text-gray-500 font-bold tracking-[0.2em] text-sm font-mono">KEYBOX.IO</h1>
-          <div className="w-8 h-8 rounded-full zen-shadow-sm flex items-center justify-center text-gray-400">
-             <Menu size={14} />
-          </div>
+          <button
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            className="w-8 h-8 rounded-full zen-shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+          </button>
         </div>
 
         {/* Display Screen */}
         <div className="mb-8">
-          <Display 
-            value={state.currentOperand} 
+          <Display
+            value={state.currentOperand}
             previousValue={state.previousOperand}
             operation={state.operation}
           />
@@ -154,10 +158,11 @@ export default function App() {
         {/* Keypad Grid */}
         <div className="grid grid-cols-4 gap-4">
           {BUTTONS.map((btn, index) => (
-            <ZenButton 
-              key={`${btn.value}-${index}`} 
-              config={btn} 
-              onClick={handleButtonClick} 
+            <ZenButton
+              key={`${btn.value}-${index}`}
+              config={btn}
+              onClick={handleButtonClick}
+              soundEnabled={soundEnabled}
             />
           ))}
         </div>
@@ -165,15 +170,15 @@ export default function App() {
         {/* Bottom Footer Area (Decorative) */}
         <div className="mt-8 flex justify-between items-center px-4 opacity-30">
           <div className="flex gap-4">
-             <div className="w-4 h-4 rounded bg-gray-400"></div>
-             <div className="w-4 h-4 rounded border-2 border-gray-400"></div>
+            <div className="w-4 h-4 rounded bg-gray-400"></div>
+            <div className="w-4 h-4 rounded border-2 border-gray-400"></div>
           </div>
           <div className="flex gap-4">
-             <Save size={16} />
-             <Trash2 size={16} />
+            <Save size={16} />
+            <Trash2 size={16} />
           </div>
         </div>
-        
+
         {/* Soft Highlight for 3D feel on the casing */}
         <div className="absolute top-4 left-4 right-4 h-24 bg-gradient-to-b from-white/30 to-transparent rounded-[2.5rem] pointer-events-none"></div>
 
