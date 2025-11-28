@@ -7,6 +7,36 @@ interface DisplayProps {
 }
 
 export const Display: React.FC<DisplayProps> = ({ value, previousValue, operation }) => {
+  // Configuration for the display slots
+  // We use 12 slots to mimic a physical LCD layout
+  const MAX_DIGITS = 12;
+
+  // Prepare the digits array
+  // 1. Split current value into characters
+  const valueChars = value.split('');
+  
+  // 2. Create an array of 12 items. 
+  // We want to fill from the right.
+  // If value is "123", and MAX is 12, we need 9 empty slots then '1', '2', '3'.
+  const slots = Array(MAX_DIGITS).fill(null);
+  
+  // 3. Fill the end of the slots array with the value characters
+  // We take the last N chars if value exceeds MAX (though App.tsx limits it)
+  const startIndex = MAX_DIGITS - valueChars.length;
+  
+  // Map to create the final renderable slots
+  const renderSlots = slots.map((_, index) => {
+    // Determine what character (if any) goes in this slot
+    // If the index is before the start of our number, it's empty (just ghost 8)
+    const charIndex = index - startIndex;
+    const activeChar = charIndex >= 0 ? valueChars[charIndex] : '';
+    
+    return {
+      id: index,
+      active: activeChar
+    };
+  });
+
   return (
     <div className="relative w-full rounded-lg overflow-hidden flex flex-col zen-shadow-inset bg-[#c8cdcf] border-[3px] border-[#f0f2f5]/50">
       
@@ -17,26 +47,37 @@ export const Display: React.FC<DisplayProps> = ({ value, previousValue, operatio
       </div>
 
       {/* Main LCD Area */}
-      <div className="flex-1 flex flex-col justify-end items-end p-4 pb-2 min-h-[110px] text-right relative z-10">
+      <div className="flex-1 flex flex-col justify-end items-end p-4 pb-2 min-h-[110px] relative z-10">
         {/* Small history text */}
-        <div className="text-gray-500 text-xs font-mono h-4 mb-1 pr-1">
+        <div className="text-gray-500 text-xs font-mono h-4 mb-1 pr-1 w-full text-right">
           {previousValue} {operation}
         </div>
         
-        {/* LCD Container - Using Grid to perfectly overlay the ghost and active digits */}
-        {/* This ensures that '8' and '1' align perfectly to the right edge */}
-        <div className="relative w-full h-[65px] grid grid-cols-1 grid-rows-1 items-end justify-end overflow-hidden">
-           
-           {/* Ghost Digits (Background 8s) */}
-           {/* 12 digits to cover the max input length */}
-           <div className="col-start-1 row-start-1 text-[4rem] leading-none text-[#1a1a1a] font-digital opacity-[0.06] select-none pointer-events-none text-right w-full whitespace-nowrap">
-             888888888888
-           </div>
-           
-           {/* Active Digits */}
-           <div className="col-start-1 row-start-1 text-[4rem] leading-none text-[#1a1a1a] font-digital overflow-hidden whitespace-nowrap text-right w-full z-10">
-             {value}
-           </div>
+        {/* LCD Digits Container */}
+        {/* We use flex-row to line up our 'Digit Slots' */}
+        <div className="flex justify-end items-end w-full overflow-hidden pr-1">
+           {renderSlots.map((slot) => (
+             <div key={slot.id} className="relative flex justify-center items-end">
+                {/* 
+                  Ghost Digit Layer:
+                  This layer is 'relative' and 'visible'. 
+                  It dictates the width/height of the slot based on the font character '8'.
+                  Since Digital-7 Mono is monospaced, every slot will be identical width.
+                */}
+                <span className="text-[4rem] leading-none text-[#1a1a1a] font-digital opacity-[0.06] select-none">
+                  8
+                </span>
+                
+                {/* 
+                  Active Digit Layer:
+                  Absolutely positioned to perfectly overlay the Ghost Digit.
+                  Since parent is relative, inset-0 puts it exactly on top.
+                */}
+                <span className="absolute inset-0 flex justify-center items-end text-[4rem] leading-none text-[#1a1a1a] font-digital z-10">
+                  {slot.active}
+                </span>
+             </div>
+           ))}
         </div>
       </div>
 
