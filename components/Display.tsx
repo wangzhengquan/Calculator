@@ -29,7 +29,7 @@ export const Display: React.FC<DisplayProps> = ({ value, previousValue, operatio
            
            {/* Ghost Digits (Background 8s) */}
            {/* 12 digits to cover the max input length */}
-           <div className="col-start-1 row-start-1 text-[4rem] leading-none text-[#1a1a1a] font-digital opacity-[0.06] select-none pointer-events-none text-right w-full">
+           <div className="col-start-1 row-start-1 text-[4rem] leading-none text-[#1a1a1a] font-digital opacity-[0.06] select-none pointer-events-none text-right w-full whitespace-nowrap">
              888888888888
            </div>
            
