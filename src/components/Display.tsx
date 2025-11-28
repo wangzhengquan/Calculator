@@ -42,7 +42,7 @@ export const Display: React.FC<DisplayProps> = ({ value, previousValue, operatio
       
       {/* Top Black Bar */}
       <div className="bg-[#1a1a1a] text-[#888] px-3 py-1 flex justify-between items-center text-[0.65rem] font-bold tracking-widest uppercase z-20">
-        <span>STREAM: HEX-01</span>
+        <span>Stream: Hex-01</span>
         <span>No. 8894-X</span>
       </div>
 
