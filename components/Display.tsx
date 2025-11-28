@@ -38,7 +38,7 @@ export const Display: React.FC<DisplayProps> = ({ value, previousValue, operatio
   });
 
   return (
-    <div className="relative w-full rounded-lg overflow-hidden flex flex-col zen-shadow-inset bg-[#c8cdcf] border-[3px] border-[#f0f2f5]/50">
+    <div className="relative w-full rounded-lg overflow-hidden flex flex-col bg-[#c8cdcf] border-[3px] border-[#f0f2f5]/50">
       
       {/* Top Black Bar */}
       <div className="bg-[#1a1a1a] text-[#888] px-3 py-1 flex justify-between items-center text-[0.65rem] font-bold tracking-widest uppercase z-20">
