@@ -6,54 +6,20 @@ interface ZenButtonProps {
   onClick: (value: string) => void;
 }
 
-// Reuse AudioContext to prevent garbage collection issues and improve performance
-let audioCtx: AudioContext | null = null;
+// Preload the audio file from a reliable CDN source (Mixkit preview)
+// This sound resembles a crisp mechanical keyboard switch or typewriter key
+const CLICK_SOUND_URL = "https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3";
+const clickAudio = new Audio(CLICK_SOUND_URL);
+clickAudio.volume = 0.5; // Set volume to a comfortable level
 
 const playClickSound = () => {
   try {
-    if (typeof window === 'undefined') return;
-
-    // Initialize AudioContext on first user interaction if not already created
-    if (!audioCtx) {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioContext) {
-        audioCtx = new AudioContext();
-      }
-    }
-
-    if (!audioCtx) return;
-
-    // Resume context if suspended (common in browsers to prevent autoplay)
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-
-    const t = audioCtx.currentTime;
-    
-    // Create oscillator for the "thock" body
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-
-    // Use a triangle wave for a slightly softer, cleaner mechanical sound
-    osc.type = 'triangle';
-    
-    // Pitch envelope: Drop quickly from 400Hz to 50Hz to simulate a physical impact
-    osc.frequency.setValueAtTime(400, t);
-    osc.frequency.exponentialRampToValueAtTime(60, t + 0.08);
-
-    // Amplitude envelope: Short attack, quick decay
-    gainNode.gain.setValueAtTime(0, t);
-    gainNode.gain.linearRampToValueAtTime(0.15, t + 0.01); // Attack
-    gainNode.gain.exponentialRampToValueAtTime(0.001, t + 0.08); // Decay
-
-    // Connect nodes
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
-    // Play sound
-    osc.start(t);
-    osc.stop(t + 0.08);
-
+    // Reset playback position to 0 to allow for rapid repeated clicking
+    clickAudio.currentTime = 0;
+    clickAudio.play().catch(e => {
+      // Handle auto-play restrictions gracefully
+      console.warn("Audio playback blocked:", e);
+    });
   } catch (e) {
     console.error("Failed to play click sound", e);
   }
